@@ -10,7 +10,6 @@ MAC_APP_USER="$HOME/Library/Input Methods/VietType.app"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 TMPD=""
 STAGE=""
-DRY=0
 
 log() { printf '%s\n' "$*"; }
 die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
@@ -59,10 +58,6 @@ validate_archive() {
 }
 
 mac_install_zip() {
-  if [ "$DRY" = 1 ]; then
-    log "Would download VietType-<version>.app.zip, verify it, and install to $MAC_APP_USER."
-    return
-  fi
   TMPD=$(mktemp -d)
   log "Checking the latest VietType release..."
   fetch "https://api.github.com/repos/$REPO/releases/latest" "$TMPD/release.json" \
@@ -98,13 +93,7 @@ mac_install_zip() {
 }
 
 main() {
-  [ "$#" -le 1 ] || die "Usage: install.sh [--dry-run | --help]"
-  case "${1:-}" in
-    --help|-h) log "Usage: install.sh [--dry-run | --help]"; return ;;
-    --dry-run) DRY=1 ;;
-    "") ;;
-    *) die "Unknown option: $1. Use --help for usage." ;;
-  esac
+  [ "$#" -eq 0 ] || die "This script does not accept arguments."
   [ "$(uname -s)" = Darwin ] || die "VietType requires macOS."
   [ "$(id -u)" != 0 ] || die "Run this script as your normal user, without sudo."
   if command -v brew >/dev/null 2>&1 && brew list --cask viettype >/dev/null 2>&1; then
