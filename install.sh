@@ -101,4 +101,4 @@ main() {
   fi
   mac_install_zip
 }
-if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then main "$@"; fi
+if [[ "${BASH_SOURCE[0]:-$0}" = "$0" ]]; then main "$@"; fi
