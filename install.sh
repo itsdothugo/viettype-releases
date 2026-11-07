@@ -65,7 +65,7 @@ mac_install_zip() {
   local tag ver archive attempt
   tag=$(json_field "$TMPD/release.json" tag_name) || die "Cannot read release metadata."
   ver=${tag#v}
-  [[ "$tag" = v* && "$ver" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || die "Invalid release tag: $tag"
+  [[ "$tag" = v* && "$ver" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || die "Invalid release tag: $tag"
   archive="$TMPD/VietType-$ver.app.zip"
   log "Downloading VietType $ver..."
   fetch "https://github.com/$REPO/releases/download/$tag/VietType-$ver.app.zip" "$archive" \
